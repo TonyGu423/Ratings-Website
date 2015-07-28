@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <form class="form-signup" action="signup" method="POST">
+
+        <h2 class="form-signup-heading">Sign Up to Judge Movies!</h2>
+
+
+
+        <div class="form-group">
+            <label for="email-field" class="sr-only">Email Address</label>
+            <input type="email"
+                   name="email"
+                   class="form-control input-lg"
+                   placeholder="Email Address"
+                   required
+                   autofocus>
+        </div>
+
+        <div class="form-group">
+            <label for="age-field" class="sr-only">Age</label>
+            <input type="number"
+                   name="age"
+                   class="form-control input-lg"
+                   placeholder="Enter Your Age">
+        </div>
+
+        <div class="form-group">
+            <label for="zip-field" class="sr-only">Zipcode</label>
+            <input type="text"
+                   name="zipcode"
+                   class="form-control input-lg"
+                   placeholder="Enter Your Zipcode">
+        </div>
+
+        <div class="form-group">
+            <label for="password-field" class="sr-only">Password</label>
+            <input type="password"
+                   name="password"
+                   class="form-control input-lg"
+                   placeholder="Password"
+                   required>
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Me Up
+        </button>
+
+    </form>
+
+{% endblock %}

@@ -21,7 +21,6 @@ app.jinja_env.undefined = StrictUndefined
 @app.route('/')
 def index():
     """Homepage."""
-    print dir(session)
 
     return render_template("homepage.html")
 
@@ -37,10 +36,15 @@ def logged_in():
 
     email = request.form.get("email")
     password = request.form.get("password")
-    flash('You were successfully logged in')
+    passcheck_query = User.query.filter_by(email=email, password=password).all()
+    if (passcheck_query):
+        flash('You were successfully logged in')
 
-    session["login_info"] = (email, password)
-    return redirect("/")
+        session["login_info"] = (email, password)
+        return redirect("/")
+    else:
+        flash("Not in our database!")
+        return render_template("signup.html")
 
 @app.route("/logout")
 def log_out():
@@ -50,6 +54,24 @@ def log_out():
 
     flash("You've been logged out.")
     return redirect("/")
+
+
+@app.route("/signup", methods=["POST"])
+def sign_up():
+    """Inserts new user to DB"""
+
+    email = request.form.get("email")
+    age = int(request.form.get("age"))
+    zipcode = request.form.get("zipcode")
+    password = request.form.get("password")
+
+    print email, age, zipcode, password
+
+    return "%r, %r, %r, %r" % (email, age, zipcode, password)
+
+
+
+
 
 @app.route("/users")
 def user_list():
