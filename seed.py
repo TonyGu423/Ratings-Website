@@ -27,6 +27,7 @@ def load_users():
 
     db.session.commit()
 
+    file_obj.close()
 
 def load_movies():
     """Load movies from u.item into database."""
@@ -55,6 +56,7 @@ def load_movies():
 
         
     db.session.commit()
+    file_obj.close()
 
 
 def load_ratings():
@@ -74,6 +76,7 @@ def load_ratings():
         if i % 10000 == 0:
             print "Inserted %d ratings" % i
             db.session.commit()
+    file_obj.close()
 
 if __name__ == "__main__":
     connect_to_db(app)

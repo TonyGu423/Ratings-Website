@@ -66,8 +66,15 @@ def sign_up():
     password = request.form.get("password")
 
     print email, age, zipcode, password
+    new_user = User(email=email,
+            age=age,
+            zipcode=zipcode,
+            password=password)
+    db.session.add(new_user)
+    db.session.commit()
+    flash('New account created! Please log in.')
 
-    return "%r, %r, %r, %r" % (email, age, zipcode, password)
+    return redirect("/login")
 
 
 
