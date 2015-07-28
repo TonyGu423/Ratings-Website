@@ -12,8 +12,41 @@ db = SQLAlchemy()
 ##############################################################################
 # Model definitions
 
-# Delete this line and put your User/Movie/Ratings model classes here.
+class User(db.Model):
+    """User of the ratings website"""
 
+    __tablename__ = "users"
+
+    user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    email = db.Column(db.String(64), nullable=True)
+    password = db.Column(db.String(64), nullable=True)
+    age = db.Column(db.Integer, nullable=True)
+    zipcode = db.Column(db.String(15), nullable=True)
+
+    def __repr__(self):
+        """Provide helpful information representation when printed!"""
+
+        return "<User user_id = %s email = %s>" %(self.user_id, self.email)
+
+class Movie(db.Model):
+    """Movie in the database"""
+
+    __tablename__ = "movies"
+
+    movie_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    released_at = db.Column(db.DateTime, nullable=False)
+    imdb_url = db.Column(db.String(500), nullable=True)
+
+class Rating(db.Model):
+    """User ratings"""
+
+    __tablename__ = "ratings"
+
+    rating_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    movie_id = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, nullable=False)
+    score = db.Column(db.Integer, nullable=False) 
 
 ##############################################################################
 # Helper functions

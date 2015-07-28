@@ -2,3 +2,4 @@ env
 *.pyc
 penny-arcade*
 mind-blown*
+*.db
