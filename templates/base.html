@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.css"/> -->
+    <title>Ratings</title>
+</head>
+<body>
+
+    <div class="navbar navbar-inverse navbar-static-top">
+    <div class="container">
+
+        <div class="navbar-header">
+            <!--<img src="/static/img/ubermelon-logo.png">-->
+            <a class="navbar-brand" href="/">Ratings</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+
+                <li>{% if 'login_info' in session.keys() %}
+                    <a href="/logout">Log Out</a>
+                  {% else %}
+                    <a href="/login">Log In</a>
+                  {% endif %}</li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+    Ratings
+    <hr>
+<!-- Show flashed messages -->
+  {% with messages = get_flashed_messages() %}
+      {% for message in messages %}
+          <div class="alert alert-warning">{{ message }}</div>
+      {% endfor %}
+  {% endwith %}
+
+    {% block content %} PUT YOUR CONTENT HERE {% endblock %}
+
+</body>
+</html>

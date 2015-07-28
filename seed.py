@@ -17,7 +17,7 @@ def load_users():
 
         line = line.rstrip().split("|")
         user = User(user_id = line[0],
-            age=line[1],
+            age=int(line[1]),
             zipcode=line[4])
         db.session.add(user)
 
