@@ -101,6 +101,46 @@ def user_details(id):
 
     return render_template("user_details.html", display_user=user, display_ratings=ratings)
 
+@app.route("/movies")
+def movie_list():
+    """Show a list of all movies"""
+
+    movies = Movie.query.order_by(Movie.title).all()
+
+    movies_revised = []
+
+    for movie in movies:
+        movie_date_raw = movie.released_at
+        movie_date = movie_date_raw.strftime("%b %d, %Y")
+
+        movie_title_raw = movie.title
+
+        if movie_title_raw[-5:] == ", The":
+            movie_title = "The " + movie_title_raw[:-5]
+        else:
+            movie_title = movie.title
+
+
+        movies_revised.append((movie.movie_id, movie_title, movie_date))
+
+    return render_template("movie_list.html", movies=movies_revised)
+
+@app.route("/movies/<int:id>")
+def movie_details(id):
+    """Show specific details on a given user"""
+
+    all_ratings = db.session.query(User.user_id, Rating.score).join(Rating)
+    ratings = all_ratings.filter(Rating.movie_id == id).all()
+
+    movie = Movie.query.get(id)
+
+    movie_title = movie.title
+    movie_date_raw = movie.released_at
+    movie_date = movie_date_raw.strftime("%b %d, %Y")
+
+
+
+    return render_template("movie_details.html", movie_title=movie_title, movie_date=movie_date, ratings=ratings)
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point

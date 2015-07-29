@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <h2>{{ movie_title }}</h2>
+
+    <ul>
+            <li>Released On: {{ movie_date }}</li>
+            <li>Ratings:
+                <ul>
+                    {% for user_id, score in ratings %}
+                        <li>User: <a href="/users/{{ user_id }}">{{ user_id }}</a> Score: {{ score }}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+
+    </ul>
+
+{% endblock %}
