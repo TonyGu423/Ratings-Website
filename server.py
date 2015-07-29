@@ -55,6 +55,11 @@ def log_out():
     flash("You've been logged out.")
     return redirect("/")
 
+@app.route("/signup", methods=["GET"])
+def sign_up_page():
+    """Display the signup page"""
+
+    return render_template("signup.html")
 
 @app.route("/signup", methods=["POST"])
 def sign_up():
@@ -77,15 +82,24 @@ def sign_up():
     return redirect("/login")
 
 
-
-
-
 @app.route("/users")
 def user_list():
     """Show list of users"""
 
     users = User.query.all()
     return render_template("user_list.html", users=users)
+
+
+@app.route("/users/<int:id>")
+def user_details(id):
+    """Show specific details on a given user"""
+
+    all_ratings = db.session.query(Movie.title, Rating.score).join(Rating)
+    ratings = all_ratings.filter(Rating.user_id == id).all()
+
+    user = User.query.get(id)
+
+    return render_template("user_details.html", display_user=user, display_ratings=ratings)
 
 
 if __name__ == "__main__":

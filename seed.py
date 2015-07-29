@@ -16,6 +16,7 @@ def load_users():
     for line in file_obj:
 
         line = line.rstrip().split("|")
+        #THIS IS US ADDING A NEW USER!!!!!!
         user = User(user_id = line[0],
             age=int(line[1]),
             zipcode=line[4])
