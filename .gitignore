@@ -4,3 +4,5 @@ penny-arcade*
 mind-blown*
 *.db
 seed_data
+htmlcov
+.coverage
