@@ -138,9 +138,25 @@ def movie_details(id):
     movie_date_raw = movie.released_at
     movie_date = movie_date_raw.strftime("%b %d, %Y")
 
+    return render_template("movie_details.html", movie_id=id, movie_title=movie_title, movie_date=movie_date, ratings=ratings)
 
 
-    return render_template("movie_details.html", movie_title=movie_title, movie_date=movie_date, ratings=ratings)
+@app.route("/rate/<int:id>", methods=["POST"])
+def rate_movies(id):
+    """Show page for rating films"""
+
+    user_id = db.session.query(User.user_id).filter_by(email=session['login_info'][0]).one()[0]
+    score = request.form.get("rating")
+    movie_id = id
+
+    rating = Rating(user_id=user_id, movie_id=movie_id, score=score)
+
+    db.session.add(rating)
+    db.session.commit()
+
+    id_string = str(movie_id)
+
+    return redirect("/movies/%s" %id_string)
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point

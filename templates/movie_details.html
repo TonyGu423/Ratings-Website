@@ -1,7 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
 
+    <div name="{{movie_id}}"></div>
     <h2>{{ movie_title }}</h2>
+    {% if 'login_info' in session.keys() %}
+    <form action="/rate/{{ movie_id }}" method="POST">
+        <label>
+            <input type="number" name="rating" min="1" max="5">
+        </label>
+        <label>
+            <input type="submit" value="rate">
+        </label>
+    </form>
+    {% endif %}
 
     <ul>
             <li>Released On: {{ movie_date }}</li>
