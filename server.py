@@ -87,6 +87,7 @@ def user_list():
     """Show list of users"""
 
     users = User.query.all()
+    
     return render_template("user_list.html", users=users)
 
 
@@ -169,3 +170,8 @@ if __name__ == "__main__":
     DebugToolbarExtension(app)
 
     app.run()
+
+
+
+# THE USER IS: balloonicorn@unicorn.com
+# THE PASSWORD: hackbright
