@@ -157,6 +157,7 @@ def movie_details(movie_id):
     else:
         user_rating = None
 
+    prediction = None
     if (not user_rating) and user_id:
         user = User.query.get(user_id)
         if user:
