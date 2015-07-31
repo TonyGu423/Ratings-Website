@@ -36,11 +36,17 @@ def logged_in():
 
     email = request.form.get("email")
     password = request.form.get("password")
+
     passcheck_query = User.query.filter_by(email=email, password=password).all()
+
     if (passcheck_query):
         flash('You were successfully logged in')
 
-        session["login_info"] = (email, password)
+        user_id_tuple = db.session.query(User.user_id).filter_by(email=email).one()
+        user_id = user_id_tuple[0]
+
+        session["login_info"] = (email, password, user_id)
+        print user_id
         return redirect("/")
     else:
         flash("Not in our database!")
@@ -126,20 +132,42 @@ def movie_list():
 
     return render_template("movie_list.html", movies=movies_revised)
 
-@app.route("/movies/<int:id>")
-def movie_details(id):
+@app.route("/movies/<int:movie_id>")
+def movie_details(movie_id):
     """Show specific details on a given user"""
 
     all_ratings = db.session.query(User.user_id, Rating.score).join(Rating)
-    ratings = all_ratings.filter(Rating.movie_id == id).all()
+    ratings = all_ratings.filter(Rating.movie_id == movie_id).all()
 
-    movie = Movie.query.get(id)
+    movie = Movie.query.get(movie_id)
 
     movie_title = movie.title
     movie_date_raw = movie.released_at
     movie_date = movie_date_raw.strftime("%b %d, %Y")
 
-    return render_template("movie_details.html", movie_id=id, movie_title=movie_title, movie_date=movie_date, ratings=ratings)
+    if "login_info" in session.keys():
+        user_id = session["login_info"][2]
+    else:
+        user_id = None
+
+    if user_id:
+        user_rating = Rating.query.filter_by(
+            movie_id=movie_id, user_id=user_id).first()
+
+    else:
+        user_rating = None
+
+    if (not user_rating) and user_id:
+        user = User.query.get(user_id)
+        if user:
+            prediction = user.predict_rating(movie)
+
+    return render_template("movie_details.html",
+                            movie_id=movie_id, 
+                            movie_title=movie_title, 
+                            movie_date=movie_date, 
+                            ratings=ratings,
+                            prediction=prediction)
 
 
 @app.route("/rate/<int:id>", methods=["POST"])

@@ -49,6 +49,75 @@ class User(db.Model):
         else:
             return 0.0
 
+    def predict_rating(self, movie):
+        """Predict user's rating of a movie."""
+
+        other_ratings = movie.ratings
+
+        similarities = [
+            (self.similarity(r.user), r)
+            for r in other_ratings
+        ]
+
+        similarities.sort(reverse=True)
+
+        similarities = [(sim, r) for sim, r in similarities if sim > 0]
+
+        if not similarities:
+            return None
+
+        numerator = sum([r.score * sim for sim, r in similarities])
+        denominator = sum([sim for sim, r in similarities])
+
+        return numerator/denominator
+
+
+            #this is the one we wrote
+    # def find_most_similar_user(self, movie):
+    #     """Finds the most similar user.
+
+    #     Returns a tuple: (similarity, user_id)
+    #     """
+
+    # # m = Movie.query.filter_by(title="Toy Story").one()
+    # # balloon = User.query.get(944)
+
+    #     other_users = [rating.user for rating in movie.ratings]
+
+    #     user_similarities = []
+
+    #     # i = 0
+    #     for other_u in other_users:
+    #         user_similarities.append((self.similarity(other_u), other_u.user_id))
+    #         # i += 1
+    #         # if i % 100 == 0:
+    #         #     print "%d users checked" % i
+
+    #     all_user_tuples = sorted(user_similarities, reverse=True)
+
+    #     top_user_tuple = all_user_tuples[0]
+
+    #     return top_user_tuple
+
+    # def guess_rating(top_user_tuple, movie_id):
+    #     """Given a similar user and a movie, predicts a rating for that movie."""
+
+    #     similarity, top_user_id = top_user_tuple
+
+    #     # print "similarity and top user id are: ", similarity, top_user_id
+
+    #     rating_tuple = db.session.query(Rating.score).filter(Rating.user_id == top_user_id, Rating.movie_id == movie_id).first()
+
+    #     # print "the rating tuple is: ", rating_tuple
+
+    #     score = rating_tuple[0]
+
+    #     guess = score * similarity
+
+    #     # print "and our guess is", guess
+    #     return guess
+
+
 class Movie(db.Model):
     """Movie in the database"""
 
@@ -106,3 +175,6 @@ if __name__ == "__main__":
     from server import app
     connect_to_db(app)
     print "Connected to DB."
+
+
+
